@@ -1,0 +1,29 @@
+FAQ - Frequently Asked Questions
+================================
+
+Q: What is 'fbctrl'?
+A: 'fbctrl' is an application to switch the window on a
+   compatible to the next or previous one.
+
+Q: What is needed?
+A: You need a compatible window manager like fluxbox, blackbox
+   or openbox.
+
+Q: Why did you start this project?
+A: Well i was migrating from fluxbox 0.1.14 to fluxbox 1.0rc3 and
+   it was not possible to recover the old window switch behaviour.
+
+Q: Why did not extend fluxbox itself?
+A: Simple answer: I have no real knowledge about C++ and so i did
+   not really understand what is done in FocusControl::cycleFocus()
+   Look at the README for detailed information.
+
+Q: Why not using bbkeys or wmctrl?
+A: Simple answer: bbkeys requires blackbox to compile and has other
+   drawbacks and wmctrl can not do what i want. Also look at the
+   README for detailed information.
+
+Q: I have a cool idea for 'fbctrl' but don't know C.
+A: No problem, i started this utility to enhance the new fluxbox
+   with some of the old behaviour. So look at the authors file and
+   send me an email.

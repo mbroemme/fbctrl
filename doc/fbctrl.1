@@ -1,0 +1,70 @@
+.\" Copyright (c) 2007 Maik Broemme <mbroemme@plusserver.de>
+.\"
+.\" This program is free software: you can redistribute it and/or modify
+.\" it under the terms of the GNU General Public License as published by
+.\" the Free Software Foundation, either version 3 of the License, or
+.\" (at your option) any later version.
+.\"
+.\" This program is distributed in the hope that it will be useful,
+.\" but WITHOUT ANY WARRANTY; without even the implied warranty of
+.\" MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+.\" GNU General Public License for more details.
+.\"
+.\" You should have received a copy of the GNU General Public License
+.\" along with this program.  If not, see <http://www.gnu.org/licenses/>.
+.TH fbctrl 1 2007-09-21 "0.1.0"
+.SH NAME
+fbctrl - utility to switch fluxbox windows and desktops.
+.SH SYNOPSIS
+.B fbctrl
+[OPTION]...
+.SH DESCRIPTION
+.PP
+\fIfbctrl\fP is a very lightweight utility to switch the windows or desktops on top of any compatible window manager like fluxbox, blackbox or openbox. The main goal behind this utility is to recover the old focus behaviour of fluxbox 0.1.14 for the newer versions, if no tabs are used.
+.SH OPTIONS
+.l
+\fIfbctrl\fP accepts the following options:
+.TP 8
+.B  -h|--help
+Print the usage help.
+.TP 8
+.B  -v|--version
+Print the installed version.
+.TP 8
+.B  -d|--debug
+Print many more or less useful information on execution.
+.TP 8
+.B  -q|--quiet
+Prints nothing except fatal errors.
+.TP 8
+.B  -n|--next-window
+Switches (activates) the next window.
+.TP 8
+.B  -p|--prev-window
+Switches (activates) the previous window.
+.TP 8
+.B     --next-desktop
+Switches (activates) the next desktop.
+.TP 8
+.B     --prev-desktop
+Switches (activates) the previous desktop.
+.SH USAGE
+.TP 8
+.B  Switches to next window on current desktop.
+fbctrl --next-window
+.TP 8
+.B  Switches to previous window on current desktop.
+fbctrl --prev-window
+.TP 8
+.B  Switches to next desktop on current screen.
+fbctrl --next-desktop
+.TP 8
+.B  Switches to previous desktop on current screen.
+fbctrl --prev-desktop
+.SH AUTHORS
+Check documentation.
+.TP
+fbctrl is (c) 2007
+.B Maik Broemme
+.PP
+Please send mails about it to Maik Broemme <mbroemme@plusserver.de>

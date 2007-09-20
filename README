@@ -1,0 +1,79 @@
+Introduction
+============
+
+'fbctrl' is an application to switch inside a compatible window
+manager the active window to the next or previous one. It is a
+lightweight application which recovers the old fluxbox 0.1.14 window
+switch behaviour.
+
+'fbctrl' is based on some parts of 'wmctrl' which is a good tool, but
+did not implement the requirements of switching to next or previous
+window on the active desktop.
+
+Why a "new" keygrabber application for fluxbox?
+===============================================
+
+First of all 'fbctrl' is no keygrabber, it is a utility which executes
+commands from at least any compatible window manager on top of the X
+layer.
+
+Well i was using fluxbox 0.1.14 for more than five years and in august
+2007 i replaced my ThinkPad X40 with a ThinkPad X61 Tablet. Due to the
+fact that i can rotate the display on a tablet pc i need to migrate to
+a newer fluxbox version which was 1.0rc3 to use the xrandr extension.
+
+Now the pain begins. :) All things were working fine except one holy
+requirement - the new focus model of fluxbox. Who the hell implemented
+such thing? I am a people who is not using the tabs from fluxbox (i
+like the old layermodel of windows and terminals) and thats why i was
+not able to understand that focus model. It has some new cool features
+like skipping stuck and shaded windows but i don't need that.
+
+Why not using bbkeys?
+=====================
+
+Well bbkeys has four drawbacks: First it only compile if blackbox is
+installed. I use fluxbox now since a long time and don't want to
+install blackbox too.
+
+The second drawback is, if you bind 'Alt+Tab' and 'Alt+Shift+Tab' to
+bbkeys and the workspace switcher to fluxbox keys your are in trouble.
+If you press Alt and hold it down everything is fine until you start to
+press Tab or F1. The application which is configured to control this key
+combination will control Alt until you release the key. So binding
+'Alt+F1' to fluxbox and 'Alt+Tab' to bbkeys result in stuck behaviour if
+you want switch focus and workspace with one keypress sequence.
+
+The third drawback is that you need to start bbkeys after fluxbox which
+is very crazy if you are not using a session manager. The only way is to
+build a shellscript which starts fluxbox as background process sleep
+some time (depending on your system load this can be enough or not :))
+and then start bbkeys.
+
+The fourth drawback is that if you need to restart your fluxbox, bbkeys
+sometimes crashes and need to be restartet in a new terminal.
+
+Why not using wmctrl?
+=====================
+
+Okay wmctrl is a very nice application. (most of the 'fbctrl' code is
+based on it) The problem with wmctrl is that you need to build a complex
+wrapper script around it. Make some high load on your system and try to
+switch the windows... :)
+
+Manual
+======
+
+It is a good idea to read the `FAQ' file.
+
+Reporting Bugs
+==============
+
+Bug reports for 'fbctrl' can be send to me directly.
+
+    * Maik Broemme <mbroemme@plusserver.de>
+
+Enjoy!
+
+Maik Broemme <mbroemme@plusserver.de>
+http://www.babelize.org/
