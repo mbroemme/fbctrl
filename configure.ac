@@ -1,5 +1,5 @@
 # The autoconf initilization.
-AC_INIT(fbctrl, 0.1.0, [mbroemme@plusserver.de], [fbctrl])
+AC_INIT(fbctrl, 0.1.1, [mbroemme@plusserver.de], [fbctrl])
 
 # Detect the canonical host and target build environment
 AC_CANONICAL_SYSTEM
