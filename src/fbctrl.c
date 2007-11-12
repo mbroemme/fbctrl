@@ -100,7 +100,7 @@ static int fbctrl__version() {
 }
 
 /* get the window properties. */
-static char *fbctrl__get_property(Display *disp, Window win, Atom xa_prop_type, char *prop_name, unsigned long *size) {
+static char *fbctrl__get_property(Display *disp, Window win, Atom xa_prop_type, char *prop_name, unsigned int *size) {
 
 	/* some common variables. */
 	Atom xa_prop_name;
@@ -108,7 +108,7 @@ static char *fbctrl__get_property(Display *disp, Window win, Atom xa_prop_type, 
 	int ret_format;
 	unsigned long ret_nitems;
 	unsigned long ret_bytes_after;
-	unsigned long tmp_size;
+	unsigned int tmp_size;
 	unsigned char *ret_prop;
 	char *ret;
 
@@ -133,6 +133,12 @@ static char *fbctrl__get_property(Display *disp, Window win, Atom xa_prop_type, 
 
 	/* null terminate the result to make string handling easier */
 	tmp_size = (ret_format / 8) * ret_nitems;
+
+	/* fix for x86_64 */
+	if (ret_format == 32) {
+		tmp_size *= sizeof(long) / 4;
+	}
+
 	ret = malloc(tmp_size + 1);
 	memcpy(ret, ret_prop, tmp_size);
 	ret[tmp_size] = '\0';
@@ -148,7 +154,7 @@ static char *fbctrl__get_property(Display *disp, Window win, Atom xa_prop_type, 
 }
 
 /* this function gets the window client list for the whole desktop. */
-static Window *fbctrl__get_client_list_desktop(Display *disp, unsigned long *size) {
+static Window *fbctrl__get_client_list_desktop(Display *disp, unsigned int *size) {
 
 	/* some common variables. */
 	Window *client_list_desktop;
@@ -169,7 +175,7 @@ static Window fbctrl__get_active_window(Display *disp) {
 
 	/* some common variables. */
 	char *prop;
-	unsigned long size;
+	unsigned int size;
 	Window ret = (Window)0;
 
 	/* get the active window. */
@@ -184,9 +190,9 @@ static Window fbctrl__get_active_window(Display *disp) {
 }
 
 /* this function sends the client a message. */
-static int fbctrl__client_message(Display *disp, Window win, char *msg, unsigned long data0) {
+static int fbctrl__client_message(Display *disp, Window win, char *msg, unsigned int data0) {
 	XEvent event;
-	long mask = SubstructureRedirectMask | SubstructureNotifyMask;
+	int mask = SubstructureRedirectMask | SubstructureNotifyMask;
 
 	event.xclient.type = ClientMessage;
 	event.xclient.serial = 0;
@@ -220,8 +226,8 @@ static int fbctrl__switch_window(unsigned int direction) {
 	Window active = 0;
 	int i;
 	int j = 0;
-	unsigned long client_list_size;
-	unsigned long *cur_desktop = NULL;
+	unsigned int client_list_size;
+	unsigned int *cur_desktop = NULL;
 
 	/* show some debug information. */
 	DEBUG("Open the X display\n");
@@ -238,8 +244,8 @@ static int fbctrl__switch_window(unsigned int direction) {
 	}
 
 	/* get current desktop. */
-	if (! (cur_desktop = (unsigned long *)fbctrl__get_property(disp, DefaultRootWindow(disp), XA_CARDINAL, "_NET_CURRENT_DESKTOP", NULL))) {
-		if (! (cur_desktop = (unsigned long *)fbctrl__get_property(disp, DefaultRootWindow(disp), XA_CARDINAL, "_WIN_WORKSPACE", NULL))) {
+	if (! (cur_desktop = (unsigned int *)fbctrl__get_property(disp, DefaultRootWindow(disp), XA_CARDINAL, "_NET_CURRENT_DESKTOP", NULL))) {
+		if (! (cur_desktop = (unsigned int *)fbctrl__get_property(disp, DefaultRootWindow(disp), XA_CARDINAL, "_WIN_WORKSPACE", NULL))) {
 			return 1;
 		}
 	}
@@ -251,15 +257,15 @@ static int fbctrl__switch_window(unsigned int direction) {
 	for (i = 0; i < client_list_size / sizeof(Window); i++) {
 
 		/* some common variables for this loop. */
-		unsigned long *desktop;
+		unsigned int *desktop;
 
 		/* get desktop id. */
-		if ((desktop = (unsigned long *)fbctrl__get_property(disp, client_list_desktop[i], XA_CARDINAL, "_NET_WM_DESKTOP", NULL)) == NULL) {
-			desktop = (unsigned long *)fbctrl__get_property(disp, client_list_desktop[i], XA_CARDINAL, "_WIN_WORKSPACE", NULL);
+		if ((desktop = (unsigned int *)fbctrl__get_property(disp, client_list_desktop[i], XA_CARDINAL, "_NET_WM_DESKTOP", NULL)) == NULL) {
+			desktop = (unsigned int *)fbctrl__get_property(disp, client_list_desktop[i], XA_CARDINAL, "_WIN_WORKSPACE", NULL);
 		}
 
-		/* special desktop id -1 means "all desktops", so we have to convert the desktop value to signed long. */
-		DEBUG("Window ID: 0x%.8lx Desktop ID: %i\n", client_list_desktop[i], desktop ? (signed long)*desktop : 0);
+		/* special desktop id -1 means "all desktops", so we have to convert the desktop value to signed int. */
+		DEBUG("Window ID: 0x%.8lx Desktop ID: %i\n", client_list_desktop[i], desktop ? (signed int)*desktop : 0);
 
 		/* check which desktop we are using. */
 		if (*cur_desktop == *desktop) {
@@ -342,8 +348,8 @@ static int fbctrl__switch_desktop(unsigned int direction) {
 
 	/* some common variables. */
 	Display *disp;
-	unsigned long *cur_desktop = NULL;
-	unsigned long *num_desktops = NULL;
+	unsigned int *cur_desktop = NULL;
+	unsigned int *num_desktops = NULL;
 
 	/* show some debug information. */
 	DEBUG("Open the X display\n");
@@ -355,8 +361,8 @@ static int fbctrl__switch_desktop(unsigned int direction) {
 	}
 
 	/* get current desktop. */
-	if (! (cur_desktop = (unsigned long *)fbctrl__get_property(disp, DefaultRootWindow(disp), XA_CARDINAL, "_NET_CURRENT_DESKTOP", NULL))) {
-		if (! (cur_desktop = (unsigned long *)fbctrl__get_property(disp, DefaultRootWindow(disp), XA_CARDINAL, "_WIN_WORKSPACE", NULL))) {
+	if (! (cur_desktop = (unsigned int *)fbctrl__get_property(disp, DefaultRootWindow(disp), XA_CARDINAL, "_NET_CURRENT_DESKTOP", NULL))) {
+		if (! (cur_desktop = (unsigned int *)fbctrl__get_property(disp, DefaultRootWindow(disp), XA_CARDINAL, "_WIN_WORKSPACE", NULL))) {
 			return 1;
 		}
 	}
@@ -365,8 +371,8 @@ static int fbctrl__switch_desktop(unsigned int direction) {
 	DEBUG("Active Desktop ID: %i\n", *cur_desktop);
 
 	/* get number of desktops. */
-	if (! (num_desktops = (unsigned long *)fbctrl__get_property(disp, DefaultRootWindow(disp), XA_CARDINAL, "_NET_NUMBER_OF_DESKTOPS", NULL))) {
-		if (! (num_desktops = (unsigned long *)fbctrl__get_property(disp, DefaultRootWindow(disp), XA_CARDINAL, "_WIN_WORKSPACE_COUNT", NULL))) {
+	if (! (num_desktops = (unsigned int *)fbctrl__get_property(disp, DefaultRootWindow(disp), XA_CARDINAL, "_NET_NUMBER_OF_DESKTOPS", NULL))) {
+		if (! (num_desktops = (unsigned int *)fbctrl__get_property(disp, DefaultRootWindow(disp), XA_CARDINAL, "_WIN_WORKSPACE_COUNT", NULL))) {
 			return 1;
 		}
 	}
