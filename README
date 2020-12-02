@@ -1,3 +1,21 @@
+=============================================================================
+OBSOLETE: THIS UTILITY IS NOT NEEDED ANYMORE FOR FLUXBOX WHICH WAS MY PRIMARY
+INTENTION TO CREATE IT.
+=======================
+
+Now, you can get the same behavior with builtin functionality in Fluxbox. I
+don't remember when it has been added because I was using fbctrl till 2020. So
+if you want to switch and have Alt+Tab and Alt+Shift+Tab configured to switch
+to next and previous window, replace the following in ~/.fluxbox/keys file.
+
+Mod1 Tab :ExecCommand ~/.fluxbox/applications/fbctrl -q --next-window --resolution 1920
+Mod1 Shift Tab :ExecCommand ~/.fluxbox/applications/fbctrl -q --prev-window --resolution 1920
+
+With:
+
+Mod1 Tab :MacroCmd {Raise} {Focus} {NextWindow {static} (Workspace=[current]) (Head=[mouse])}
+Mod1 Shift Tab :MacroCmd {Raise} {Focus} {PrevWindow {static} (Workspace=[current]) (Head=[mouse])}
+
 Introduction
 ============
 
